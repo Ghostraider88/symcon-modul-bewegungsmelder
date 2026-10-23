@@ -128,7 +128,7 @@ class MotionSensor extends IPSModuleStrict
             return;
         }
         $conditionVariableIDs = array_values(array_unique(array_merge(
-            array_filter([$blockVariableID, $brightnessVariableID], static fn(int $id): bool => $id > 0),
+            array_filter([$blockVariableID, $brightnessVariableID], static fn (int $id): bool => $id > 0),
             array_column($profileConditions, 'VariableID')
         )));
         $inputVariableIDs = array_column($motionInputs, 'VariableID');
@@ -138,7 +138,7 @@ class MotionSensor extends IPSModuleStrict
             return;
         }
         $allOutputIDs = array_values(array_unique(array_merge([$targetVariableID], array_column($outputProfiles, 'VariableID'))));
-        $allOutputIDs = array_filter($allOutputIDs, static fn(int $id): bool => $id > 0);
+        $allOutputIDs = array_filter($allOutputIDs, static fn (int $id): bool => $id > 0);
         if (array_intersect($allOutputIDs, array_merge($inputVariableIDs, $conditionVariableIDs)) !== []) {
             $this->SetStatus(202);
             $this->UpdateVisualizationValue($this->GetVisualizationPayload());
@@ -332,6 +332,11 @@ class MotionSensor extends IPSModuleStrict
         return ModuleVisuStyle::renderTile($this->GetVisualizationConfiguration());
     }
 
+    protected function getTime(): int
+    {
+        return time();
+    }
+
     private function UpdateReferences(
         array $motionInputs,
         int $blockVariableID,
@@ -339,35 +344,34 @@ class MotionSensor extends IPSModuleStrict
         int $targetVariableID,
         array $outputProfiles,
         array $profileConditions
-    ): void
-    {
+    ): void {
         $motionInputIDs = array_column($motionInputs, 'VariableID');
         $profileConditionIDs = array_column($profileConditions, 'VariableID');
         $profileOutputIDs = array_column($outputProfiles, 'VariableID');
         $messageIDs = array_values(array_unique(array_filter(
             array_merge($motionInputIDs, [$blockVariableID, $brightnessVariableID], $profileConditionIDs),
-            static fn(int $id): bool => $id > 0 && IPS_VariableExists($id)
+            static fn (int $id): bool => $id > 0 && IPS_VariableExists($id)
         )));
         $referenceIDs = array_values(array_unique(array_filter(
             array_merge($messageIDs, [$targetVariableID], $profileOutputIDs),
-            static fn(int $id): bool => $id > 0 && IPS_VariableExists($id)
+            static fn (int $id): bool => $id > 0 && IPS_VariableExists($id)
         )));
 
         $previousMessageIDs = json_decode($this->ReadAttributeString('RegisteredMessageIDs'), true) ?: [];
         $previousReferenceIDs = json_decode($this->ReadAttributeString('RegisteredReferenceIDs'), true) ?: [];
 
         foreach (array_diff($previousMessageIDs, $messageIDs) as $id) {
-            $this->UnregisterMessage((int)$id, VM_UPDATE);
+            $this->UnregisterMessage((int) $id, VM_UPDATE);
         }
         foreach (array_diff($previousReferenceIDs, $referenceIDs) as $id) {
-            $this->UnregisterReference((int)$id);
+            $this->UnregisterReference((int) $id);
         }
         // Message subscriptions are runtime filters; rebuild them after a module reload.
         foreach ($messageIDs as $id) {
-            $this->RegisterMessage((int)$id, VM_UPDATE);
+            $this->RegisterMessage((int) $id, VM_UPDATE);
         }
         foreach (array_diff($referenceIDs, $previousReferenceIDs) as $id) {
-            $this->RegisterReference((int)$id);
+            $this->RegisterReference((int) $id);
         }
 
         $this->WriteAttributeString('RegisteredMessageIDs', json_encode($messageIDs, JSON_THROW_ON_ERROR));
@@ -422,7 +426,7 @@ class MotionSensor extends IPSModuleStrict
             $this->WriteAttributeInteger('DueAt', time() + $this->ReadPropertyInteger('OffDelay'));
             $this->SetOccupied(true);
             $this->RestoreTimer();
-        } elseif ((bool)$this->GetValue('Occupied')) {
+        } elseif ((bool) $this->GetValue('Occupied')) {
             if ($this->ReadAttributeInteger('DueAt') === 0) {
                 $offDelay = $this->ReadPropertyInteger('OffDelay');
                 if ($offDelay === 0) {
@@ -447,8 +451,8 @@ class MotionSensor extends IPSModuleStrict
         $motionVariableID = $this->ReadPropertyInteger('MotionVariableID');
         if ($motionVariableID > 0) {
             $inputs[] = [
-                'VariableID' => $motionVariableID,
-                'InputMode' => $this->ReadPropertyString('InputMode'),
+                'VariableID'  => $motionVariableID,
+                'InputMode'   => $this->ReadPropertyString('InputMode'),
                 'InvertInput' => $this->ReadPropertyBoolean('InvertInput'),
             ];
         }
@@ -477,8 +481,8 @@ class MotionSensor extends IPSModuleStrict
                 throw new InvalidArgumentException('Additional motion input settings are invalid.');
             }
             $inputs[] = [
-                'VariableID' => (int)$variableID,
-                'InputMode' => $inputMode,
+                'VariableID'  => (int) $variableID,
+                'InputMode'   => $inputMode,
                 'InvertInput' => $invertInput,
             ];
         }
@@ -507,7 +511,7 @@ class MotionSensor extends IPSModuleStrict
                 throw new InvalidArgumentException('Each output profile entry must be an object.');
             }
 
-            $name = trim((string)($profile['Profile'] ?? ''));
+            $name = trim((string) ($profile['Profile'] ?? ''));
             $variableID = filter_var($profile['VariableID'] ?? 0, FILTER_VALIDATE_INT);
             $onValue = $profile['OnValue'] ?? null;
             $offValue = $profile['OffValue'] ?? null;
@@ -519,10 +523,10 @@ class MotionSensor extends IPSModuleStrict
             }
 
             $result[] = [
-                'Profile' => $name,
-                'VariableID' => (int)$variableID,
-                'OnValue' => $onValue,
-                'OffValue' => $offValue,
+                'Profile'    => $name,
+                'VariableID' => (int) $variableID,
+                'OnValue'    => $onValue,
+                'OffValue'   => $offValue,
             ];
         }
 
@@ -551,7 +555,7 @@ class MotionSensor extends IPSModuleStrict
                 throw new InvalidArgumentException('Each profile condition entry must be an object.');
             }
 
-            $profile = trim((string)($condition['Profile'] ?? ''));
+            $profile = trim((string) ($condition['Profile'] ?? ''));
             $variableID = filter_var($condition['VariableID'] ?? 0, FILTER_VALIDATE_INT);
             $operator = $condition['Operator'] ?? 'equals';
             $expectedValue = $condition['ExpectedValue'] ?? '';
@@ -565,9 +569,9 @@ class MotionSensor extends IPSModuleStrict
             }
 
             $result[] = [
-                'Profile' => $profile,
-                'VariableID' => (int)$variableID,
-                'Operator' => $operator,
+                'Profile'       => $profile,
+                'VariableID'    => (int) $variableID,
+                'Operator'      => $operator,
                 'ExpectedValue' => $expectedValue,
             ];
         }
@@ -601,11 +605,11 @@ class MotionSensor extends IPSModuleStrict
     {
         $variableID = $condition['VariableID'];
         return match ($condition['Operator']) {
-            'active' => $this->ReadVariableActive($variableID, false),
-            'inactive' => !$this->ReadVariableActive($variableID, false),
-            'equals' => GetValue($variableID) === $this->ParseVariableValue($variableID, $condition['ExpectedValue']),
+            'active'     => $this->ReadVariableActive($variableID, false),
+            'inactive'   => !$this->ReadVariableActive($variableID, false),
+            'equals'     => GetValue($variableID) === $this->ParseVariableValue($variableID, $condition['ExpectedValue']),
             'not_equals' => GetValue($variableID) !== $this->ParseVariableValue($variableID, $condition['ExpectedValue']),
-            default => false,
+            default      => false,
         };
     }
 
@@ -623,7 +627,7 @@ class MotionSensor extends IPSModuleStrict
                     }
                     $commands[] = [
                         'VariableID' => $profile['VariableID'],
-                        'Value' => $this->ParseVariableValue($profile['VariableID'], $rawValue),
+                        'Value'      => $this->ParseVariableValue($profile['VariableID'], $rawValue),
                     ];
                 }
             }
@@ -632,7 +636,7 @@ class MotionSensor extends IPSModuleStrict
             if ($targetVariableID > 0) {
                 $commands[] = [
                     'VariableID' => $targetVariableID,
-                    'Value' => $this->GetTargetValue($state),
+                    'Value'      => $this->GetTargetValue($state),
                 ];
             }
         }
@@ -649,7 +653,7 @@ class MotionSensor extends IPSModuleStrict
                         }
                         $previousCommands[] = [
                             'VariableID' => $profile['VariableID'],
-                            'Value' => $this->ParseVariableValue($profile['VariableID'], $profile['OffValue']),
+                            'Value'      => $this->ParseVariableValue($profile['VariableID'], $profile['OffValue']),
                         ];
                     }
                 }
@@ -657,7 +661,7 @@ class MotionSensor extends IPSModuleStrict
                 $targetVariableID = $this->ReadPropertyInteger('TargetVariableID');
                 $previousCommands[] = [
                     'VariableID' => $targetVariableID,
-                    'Value' => $this->GetTargetValue(false),
+                    'Value'      => $this->GetTargetValue(false),
                 ];
             }
 
@@ -686,10 +690,10 @@ class MotionSensor extends IPSModuleStrict
     {
         $value = GetValue($variableID);
         $active = match (gettype($value)) {
-            'boolean' => $value,
+            'boolean'           => $value,
             'integer', 'double' => $value != 0,
-            'string' => in_array(strtolower(trim($value)), ['1', 'true', 'on', 'yes', 'motion', 'occupied'], true),
-            default => throw new InvalidArgumentException('The selected motion variable has an unsupported value type.'),
+            'string'            => in_array(strtolower(trim($value)), ['1', 'true', 'on', 'yes', 'motion', 'occupied'], true),
+            default             => throw new InvalidArgumentException('The selected motion variable has an unsupported value type.'),
         };
 
         return $invert ? !$active : $active;
@@ -697,7 +701,7 @@ class MotionSensor extends IPSModuleStrict
 
     private function SetOccupied(bool $occupied): void
     {
-        $changed = (bool)$this->GetValue('Occupied') !== $occupied;
+        $changed = (bool) $this->GetValue('Occupied') !== $occupied;
         $this->SetValue('Occupied', $occupied);
         if (!$occupied) {
             $this->SetValue('RemainingSeconds', 0);
@@ -721,7 +725,7 @@ class MotionSensor extends IPSModuleStrict
             $this->SendDebug(__FUNCTION__, $exception->getMessage(), 0);
         }
         $blocked = $this->IsExternalBlockActive();
-        $occupied = (bool)$this->GetValue('Occupied');
+        $occupied = (bool) $this->GetValue('Occupied');
         $brightnessConditionMet = $this->IsBrightnessConditionMet();
         $this->SetValue('AutomaticBlocked', $blocked);
         $this->SetValue('TurnOnConditionMet', $brightnessConditionMet);
@@ -763,7 +767,7 @@ class MotionSensor extends IPSModuleStrict
                 throw new InvalidArgumentException('The selected brightness variable is not numeric.');
             }
 
-            $this->SetValue('CurrentBrightness', (float)$brightness);
+            $this->SetValue('CurrentBrightness', (float) $brightness);
             $threshold = $this->ReadPropertyFloat('BrightnessThreshold');
             return $this->ReadPropertyString('BrightnessCondition') === 'below'
                 ? $brightness < $threshold
@@ -861,18 +865,18 @@ class MotionSensor extends IPSModuleStrict
         return match ($variableType) {
             VARIABLETYPE_BOOLEAN => $this->ParseBooleanValue($rawValue),
             VARIABLETYPE_INTEGER => $this->ParseIntegerValue($rawValue),
-            VARIABLETYPE_FLOAT => $this->ParseFloatValue($rawValue),
-            VARIABLETYPE_STRING => $rawValue,
-            default => throw new InvalidArgumentException('The selected target variable has an unsupported value type.'),
+            VARIABLETYPE_FLOAT   => $this->ParseFloatValue($rawValue),
+            VARIABLETYPE_STRING  => $rawValue,
+            default              => throw new InvalidArgumentException('The selected target variable has an unsupported value type.'),
         };
     }
 
     private function ParseBooleanValue(string $value): bool
     {
         return match (strtolower(trim($value))) {
-            '1', 'true', 'on', 'yes' => true,
+            '1', 'true', 'on', 'yes'  => true,
             '0', 'false', 'off', 'no' => false,
-            default => throw new InvalidArgumentException('Boolean target values must be true/false, on/off, yes/no, or 1/0.'),
+            default                   => throw new InvalidArgumentException('Boolean target values must be true/false, on/off, yes/no, or 1/0.'),
         };
     }
 
@@ -882,7 +886,7 @@ class MotionSensor extends IPSModuleStrict
             throw new InvalidArgumentException('Integer target values must contain a whole number.');
         }
 
-        return (int)trim($value);
+        return (int) trim($value);
     }
 
     private function ParseFloatValue(string $value): float
@@ -891,7 +895,7 @@ class MotionSensor extends IPSModuleStrict
             throw new InvalidArgumentException('Float target values must be numeric.');
         }
 
-        $parsed = (float)trim($value);
+        $parsed = (float) trim($value);
         if (!is_finite($parsed)) {
             throw new InvalidArgumentException('Float target values must be finite.');
         }
@@ -922,7 +926,7 @@ class MotionSensor extends IPSModuleStrict
 
     private function GetVisualizationConfiguration(): array
     {
-        $occupied = (bool)$this->GetValue('Occupied');
+        $occupied = (bool) $this->GetValue('Occupied');
         $override = $this->ReadAttributeBoolean('ManualOverrideActive');
         $automationEnabled = $this->ReadPropertyBoolean('AutomationEnabled');
         try {
@@ -949,9 +953,9 @@ class MotionSensor extends IPSModuleStrict
 
     private function RenderVisualizationContent(bool $occupied, bool $override, bool $automationEnabled): string
     {
-        $motion = (bool)$this->GetValue('MotionDetected');
-        $remaining = (int)$this->GetValue('RemainingSeconds');
-        $output = (bool)$this->GetValue('OutputState');
+        $motion = (bool) $this->GetValue('MotionDetected');
+        $remaining = (int) $this->GetValue('RemainingSeconds');
+        $output = (bool) $this->GetValue('OutputState');
         $content = ModuleVisuStyle::stateBlock(
             $this->Translate('Motion'),
             $motion ? $this->Translate('Detected') : $this->Translate('No motion'),
@@ -967,13 +971,13 @@ class MotionSensor extends IPSModuleStrict
         if ($occupied && $remaining > 0) {
             $content .= ModuleVisuStyle::section(
                 $this->Translate('Off delay'),
-                '<div class="mvs-content">' . htmlspecialchars((string)$remaining, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ' s</div>'
+                '<div class="mvs-content">' . htmlspecialchars((string) $remaining, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . ' s</div>'
             );
         }
         if ($this->ReadPropertyInteger('BrightnessVariableID') > 0) {
             $content .= ModuleVisuStyle::stateBlock(
                 $this->Translate('Current brightness'),
-                sprintf('%.0f lx', (float)$this->GetValue('CurrentBrightness')),
+                sprintf('%.0f lx', (float) $this->GetValue('CurrentBrightness')),
                 'info'
             );
         }
@@ -985,16 +989,16 @@ class MotionSensor extends IPSModuleStrict
         if (!$automationEnabled) {
             $content .= ModuleVisuStyle::alert($this->Translate('Automation is disabled; output actions are suppressed.'), 'warning');
         }
-        $activeProfile = (string)$this->GetValue('ActiveProfile');
+        $activeProfile = (string) $this->GetValue('ActiveProfile');
         if ($activeProfile !== '') {
             $content .= ModuleVisuStyle::stateBlock($this->Translate('Active output profile'), $activeProfile, 'info');
         }
         if ($this->ReadPropertyInteger('TargetVariableID') === 0 && $activeProfile === '') {
             $content .= ModuleVisuStyle::alert($this->Translate('No output target selected; the requested state remains local.'));
         }
-        if ((bool)$this->GetValue('AutomaticBlocked')) {
+        if ((bool) $this->GetValue('AutomaticBlocked')) {
             $content .= ModuleVisuStyle::alert($this->Translate('Automatic control is blocked by the selected variable.'), 'warning');
-        } elseif ($occupied && !(bool)$this->GetValue('TurnOnConditionMet')) {
+        } elseif ($occupied && !(bool) $this->GetValue('TurnOnConditionMet')) {
             $content .= ModuleVisuStyle::alert($this->Translate('Brightness condition prevents automatic turn-on.'), 'warning');
         }
         if ($override) {

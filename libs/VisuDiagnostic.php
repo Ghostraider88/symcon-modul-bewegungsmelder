@@ -32,11 +32,11 @@ final class ModuleVisuDiagnostic
         $html = '';
 
         foreach ($checks as $check) {
-            $passed = (bool)($check['passed'] ?? false);
-            $state = ModuleVisuState::cssState((string)($check['severity'] ?? ($passed ? 'ok' : 'error')));
-            $label = self::escape((string)($check['label'] ?? 'Prüfung'));
-            $message = self::escape((string)($check['message'] ?? ''));
-            $recommendation = self::escape((string)($check['recommendation'] ?? ''));
+            $passed = (bool) ($check['passed'] ?? false);
+            $state = ModuleVisuState::cssState((string) ($check['severity'] ?? ($passed ? 'ok' : 'error')));
+            $label = self::escape((string) ($check['label'] ?? 'Prüfung'));
+            $message = self::escape((string) ($check['message'] ?? ''));
+            $recommendation = self::escape((string) ($check['recommendation'] ?? ''));
             $icon = $passed ? '✓' : '!';
             $recommendationMarkup = $recommendation === ''
                 ? ''
@@ -55,7 +55,7 @@ final class ModuleVisuDiagnostic
     public static function hasProblems(array $checks): bool
     {
         foreach ($checks as $check) {
-            if (!(bool)($check['passed'] ?? false)) {
+            if (!(bool) ($check['passed'] ?? false)) {
                 return true;
             }
         }

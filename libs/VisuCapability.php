@@ -18,7 +18,7 @@ final class ModuleVisuCapability
             return '';
         }
 
-        return (string)$renderer();
+        return (string) $renderer();
     }
 
     public static function missing(array $capabilities, string $capability, string $label): string

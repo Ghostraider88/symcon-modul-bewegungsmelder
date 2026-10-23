@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use PHPUnitFrameworkTestCase;
+use PHPUnit\Framework\TestCase;
 
-require_once __DIR__ . '/libs/VisuState.php';
-require_once __DIR__ . '/libs/VisuDiagnostic.php';
-require_once __DIR__ . '/libs/VisuCapability.php';
+require_once __DIR__ . '/../libs/VisuState.php';
+require_once __DIR__ . '/../libs/VisuDiagnostic.php';
+require_once __DIR__ . '/../libs/VisuCapability.php';
 
 final class VisuTemplateTest extends TestCase
 {
@@ -34,7 +34,7 @@ final class VisuTemplateTest extends TestCase
     public function testCapabilityRendering(): void
     {
         $this->assertTrue(ModuleVisuCapability::has(['switch'], 'switch'));
-        $this->assertSame('', ModuleVisuCapability::when([], 'switch', static fn(): string => 'hidden'));
-        $this->assertSame('visible', ModuleVisuCapability::when(['switch'], 'switch', static fn(): string => 'visible'));
+        $this->assertSame('', ModuleVisuCapability::when([], 'switch', static fn (): string => 'hidden'));
+        $this->assertSame('visible', ModuleVisuCapability::when(['switch'], 'switch', static fn (): string => 'visible'));
     }
 }

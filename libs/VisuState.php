@@ -43,10 +43,10 @@ final class ModuleVisuState
         $state = self::normalize($state);
 
         return match ($state) {
-            'ok' => 'normal',
+            'ok'                => 'normal',
             'stale', 'degraded' => 'warning',
-            'not_configured' => 'disabled',
-            default => $state,
+            'not_configured'    => 'disabled',
+            default             => $state,
         };
     }
 }

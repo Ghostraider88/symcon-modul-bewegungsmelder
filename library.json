@@ -2,11 +2,11 @@
     "id": "{EF90375D-A954-4861-BEF0-CC9368ED1768}",
     "author": "Community Contributors",
     "name": "Motion Sensor Library",
-    "url": "",
+    "url": "https://www.symcon.de/",
     "compatibility": {
         "version": "8.1"
     },
     "version": "0.1",
-    "build": 2,
-    "date": 1792751272
+    "build": 3,
+    "date": 1792751605
 }

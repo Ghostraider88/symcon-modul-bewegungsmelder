@@ -23,12 +23,12 @@ final class ModuleVisuStyle
      */
     public static function renderTile(array $configuration): string
     {
-        $title = self::escape((string)($configuration['title'] ?? 'Modul'));
-        $icon = self::escape((string)($configuration['icon'] ?? 'fa-light fa-cube'));
-        $state = self::stateClass((string)($configuration['state'] ?? 'normal'));
-        $stateLabel = self::escape((string)($configuration['stateLabel'] ?? 'Bereit'));
-        $content = (string)($configuration['content'] ?? '');
-        $footer = self::escape((string)($configuration['footer'] ?? ''));
+        $title = self::escape((string) ($configuration['title'] ?? 'Modul'));
+        $icon = self::escape((string) ($configuration['icon'] ?? 'fa-light fa-cube'));
+        $state = self::stateClass((string) ($configuration['state'] ?? 'normal'));
+        $stateLabel = self::escape((string) ($configuration['stateLabel'] ?? 'Bereit'));
+        $content = (string) ($configuration['content'] ?? '');
+        $footer = self::escape((string) ($configuration['footer'] ?? ''));
         $footerMarkup = $footer === '' ? '' : '<div class="mvs-footer" data-mvs-footer>' . $footer . '</div>';
 
         return <<<HTML
@@ -178,6 +178,6 @@ HTML;
 
     private static function jsonString(string $value): string
     {
-        return (string)json_encode($value, JSON_THROW_ON_ERROR | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+        return (string) json_encode($value, JSON_THROW_ON_ERROR | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
     }
 }

@@ -99,8 +99,8 @@ final class MotionSensorTest extends TestCaseSymconValidation
         $targetVariableID = $this->createActionableVariable(VARIABLETYPE_INTEGER, 0);
         $instanceID = $this->createInstance();
         $additionalInputs = json_encode([[
-            'VariableID' => $additionalVariableID,
-            'InputMode' => 'presence',
+            'VariableID'  => $additionalVariableID,
+            'InputMode'   => 'presence',
             'InvertInput' => false,
         ]], JSON_THROW_ON_ERROR);
         $this->configure($instanceID, [
@@ -205,7 +205,7 @@ final class MotionSensorTest extends TestCaseSymconValidation
         ], JSON_THROW_ON_ERROR);
         $instanceID = $this->createInstance();
         $this->configure($instanceID, [
-            'MotionVariableID'  => $motionVariableID,
+            'MotionVariableID'   => $motionVariableID,
             'OffDelay'           => 0,
             'OutputProfiles'     => $profiles,
             'ProfileConditions'  => $conditions,
@@ -258,9 +258,9 @@ final class MotionSensorTest extends TestCaseSymconValidation
         ], JSON_THROW_ON_ERROR);
         $instanceID = $this->createInstance();
         $this->configure($instanceID, [
-            'MotionVariableID' => $motionVariableID,
-            'OffDelay' => 0,
-            'OutputProfiles' => $profiles,
+            'MotionVariableID'  => $motionVariableID,
+            'OffDelay'          => 0,
+            'OutputProfiles'    => $profiles,
             'ProfileConditions' => $conditions,
         ]);
 
