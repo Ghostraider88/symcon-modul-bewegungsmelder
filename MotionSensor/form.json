@@ -1,0 +1,277 @@
+{
+    "elements": [
+        {
+            "type": "CheckBox",
+            "name": "AutomationEnabled",
+            "caption": "Enable automation"
+        },
+        {
+            "type": "SelectVariable",
+            "name": "MotionVariableID",
+            "caption": "Motion input variable"
+        },
+        {
+            "type": "Select",
+            "name": "InputMode",
+            "caption": "Input behavior",
+            "options": [
+                {
+                    "caption": "Presence state (true while occupied)",
+                    "value": "presence"
+                },
+                {
+                    "caption": "Motion pulse (each active update starts the delay)",
+                    "value": "pulse"
+                }
+            ]
+        },
+        {
+            "type": "CheckBox",
+            "name": "InvertInput",
+            "caption": "Invert input value"
+        },
+        {
+            "type": "List",
+            "name": "AdditionalMotionInputs",
+            "caption": "Additional motion inputs",
+            "add": true,
+            "delete": true,
+            "changeOrder": true,
+            "rowCount": 3,
+            "columns": [
+                {
+                    "caption": "Motion variable",
+                    "name": "VariableID",
+                    "width": "auto",
+                    "add": 0,
+                    "edit": {
+                        "type": "SelectVariable",
+                        "validVariableTypes": [0, 1, 2, 3]
+                    }
+                },
+                {
+                    "caption": "Input behavior",
+                    "name": "InputMode",
+                    "width": "220px",
+                    "add": "presence",
+                    "edit": {
+                        "type": "Select",
+                        "options": [
+                            {
+                                "caption": "Presence state (true while occupied)",
+                                "value": "presence"
+                            },
+                            {
+                                "caption": "Motion pulse (each active update starts the delay)",
+                                "value": "pulse"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "caption": "Invert",
+                    "name": "InvertInput",
+                    "width": "80px",
+                    "add": false,
+                    "edit": {
+                        "type": "CheckBox"
+                    }
+                }
+            ]
+        },
+        {
+            "type": "NumberSpinner",
+            "name": "OffDelay",
+            "caption": "Off delay (seconds)",
+            "minimum": 0,
+            "maximum": 86400
+        },
+        {
+            "type": "SelectVariable",
+            "name": "BlockVariableID",
+            "caption": "Optional automation block variable",
+            "validVariableTypes": [0, 1, 2, 3]
+        },
+        {
+            "type": "CheckBox",
+            "name": "BlockWhenActive",
+            "caption": "Block when the selected variable is active"
+        },
+        {
+            "type": "SelectVariable",
+            "name": "BrightnessVariableID",
+            "caption": "Optional brightness variable",
+            "validVariableTypes": [1, 2]
+        },
+        {
+            "type": "NumberSpinner",
+            "name": "BrightnessThreshold",
+            "caption": "Brightness threshold (lx)",
+            "minimum": 0,
+            "maximum": 200000,
+            "digits": 1
+        },
+        {
+            "type": "Select",
+            "name": "BrightnessCondition",
+            "caption": "Allow automatic turn-on when brightness is",
+            "options": [
+                {
+                    "caption": "Below the threshold",
+                    "value": "below"
+                },
+                {
+                    "caption": "At or above the threshold",
+                    "value": "above"
+                }
+            ]
+        },
+        {
+            "type": "List",
+            "name": "OutputProfiles",
+            "caption": "Profile output actions",
+            "add": true,
+            "delete": true,
+            "changeOrder": true,
+            "rowCount": 4,
+            "columns": [
+                {
+                    "caption": "Profile name",
+                    "name": "Profile",
+                    "width": "140px",
+                    "add": "Day",
+                    "edit": { "type": "ValidationTextBox" }
+                },
+                {
+                    "caption": "Action variable",
+                    "name": "VariableID",
+                    "width": "auto",
+                    "add": 0,
+                    "edit": {
+                        "type": "SelectVariable",
+                        "validVariableTypes": [0, 1, 2, 3],
+                        "requiredAction": 1
+                    }
+                },
+                {
+                    "caption": "On value",
+                    "name": "OnValue",
+                    "width": "100px",
+                    "add": "true",
+                    "edit": { "type": "ValidationTextBox" }
+                },
+                {
+                    "caption": "Off value",
+                    "name": "OffValue",
+                    "width": "100px",
+                    "add": "false",
+                    "edit": { "type": "ValidationTextBox" }
+                }
+            ]
+        },
+        {
+            "type": "List",
+            "name": "ProfileConditions",
+            "caption": "Profile selection conditions",
+            "add": true,
+            "delete": true,
+            "changeOrder": true,
+            "rowCount": 4,
+            "columns": [
+                {
+                    "caption": "Profile name",
+                    "name": "Profile",
+                    "width": "120px",
+                    "add": "Day",
+                    "edit": { "type": "ValidationTextBox" }
+                },
+                {
+                    "caption": "Condition variable",
+                    "name": "VariableID",
+                    "width": "auto",
+                    "add": 0,
+                    "edit": {
+                        "type": "SelectVariable",
+                        "validVariableTypes": [0, 1, 2, 3]
+                    }
+                },
+                {
+                    "caption": "Operator",
+                    "name": "Operator",
+                    "width": "130px",
+                    "add": "equals",
+                    "edit": {
+                        "type": "Select",
+                        "options": [
+                            { "caption": "Equals value", "value": "equals" },
+                            { "caption": "Does not equal", "value": "not_equals" },
+                            { "caption": "Is active", "value": "active" },
+                            { "caption": "Is inactive", "value": "inactive" }
+                        ]
+                    }
+                },
+                {
+                    "caption": "Expected value",
+                    "name": "ExpectedValue",
+                    "width": "100px",
+                    "add": "true",
+                    "edit": { "type": "ValidationTextBox" }
+                }
+            ]
+        },
+        {
+            "type": "Label",
+            "caption": "The first profile in the output list whose conditions all match is used. Profiles without conditions always match, so put a default profile last. Each profile can control multiple action variables. Leave an on/off value empty to skip that action for the corresponding state. When no profile matches, the standard output target is used."
+        },
+        {
+            "type": "SelectVariable",
+            "name": "TargetVariableID",
+            "caption": "Optional output action variable",
+            "validVariableTypes": [0, 1, 2, 3],
+            "requiredAction": 1
+        },
+        {
+            "type": "ValidationTextBox",
+            "name": "TargetOnValue",
+            "caption": "Output value when occupied"
+        },
+        {
+            "type": "ValidationTextBox",
+            "name": "TargetOffValue",
+            "caption": "Output value when clear"
+        },
+        {
+            "type": "Label",
+            "caption": "The selected output must have a variable action. Leave it empty to use the module as a local status and control instance."
+        }
+    ],
+    "actions": [
+        {
+            "type": "Button",
+            "caption": "Refresh from motion input",
+            "onClick": "MSM_Refresh($id);"
+        }
+    ],
+    "status": [
+        {
+            "code": 102,
+            "icon": "active",
+            "caption": "Active"
+        },
+        {
+            "code": 104,
+            "icon": "inactive",
+            "caption": "Automation disabled or no motion input configured"
+        },
+        {
+            "code": 202,
+            "icon": "error",
+            "caption": "Invalid configuration"
+        },
+        {
+            "code": 203,
+            "icon": "error",
+            "caption": "Input or output action failed"
+        }
+    ]
+}

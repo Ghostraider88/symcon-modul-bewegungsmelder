@@ -1,0 +1,15 @@
+{
+    "id": "{45D55088-6DC3-484C-B382-955A221AFC28}",
+    "name": "Motion Sensor",
+    "type": 3,
+    "vendor": "",
+    "aliases": [
+        "Movement Sensor",
+        "Presence Sensor"
+    ],
+    "url": "",
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "MSM"
+}

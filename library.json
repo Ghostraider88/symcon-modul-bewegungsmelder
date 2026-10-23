@@ -1,12 +1,12 @@
 {
-    "id": "{00000000-0000-0000-0000-000000000001}",
-    "author": "DEIN NAME",
-    "name": "My Symcon Library",
-    "url": "https://github.com/DEIN-USER/DEIN-REPO",
+    "id": "{EF90375D-A954-4861-BEF0-CC9368ED1768}",
+    "author": "Community Contributors",
+    "name": "Motion Sensor Library",
+    "url": "",
     "compatibility": {
         "version": "8.1"
     },
-    "version": "1.0",
-    "build": 1,
-    "date": 0
+    "version": "0.1",
+    "build": 2,
+    "date": 1792751272
 }
