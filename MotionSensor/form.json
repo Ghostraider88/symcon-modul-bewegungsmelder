@@ -46,7 +46,12 @@
                     "add": 0,
                     "edit": {
                         "type": "SelectVariable",
-                        "validVariableTypes": [0, 1, 2, 3]
+                        "validVariableTypes": [
+                            0,
+                            1,
+                            2,
+                            3
+                        ]
                     }
                 },
                 {
@@ -90,7 +95,12 @@
             "type": "SelectVariable",
             "name": "BlockVariableID",
             "caption": "Optional automation block variable",
-            "validVariableTypes": [0, 1, 2, 3]
+            "validVariableTypes": [
+                0,
+                1,
+                2,
+                3
+            ]
         },
         {
             "type": "CheckBox",
@@ -101,7 +111,10 @@
             "type": "SelectVariable",
             "name": "BrightnessVariableID",
             "caption": "Optional brightness variable",
-            "validVariableTypes": [1, 2]
+            "validVariableTypes": [
+                1,
+                2
+            ]
         },
         {
             "type": "NumberSpinner",
@@ -140,7 +153,9 @@
                     "name": "Profile",
                     "width": "140px",
                     "add": "Day",
-                    "edit": { "type": "ValidationTextBox" }
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    }
                 },
                 {
                     "caption": "Action variable",
@@ -149,7 +164,12 @@
                     "add": 0,
                     "edit": {
                         "type": "SelectVariable",
-                        "validVariableTypes": [0, 1, 2, 3],
+                        "validVariableTypes": [
+                            0,
+                            1,
+                            2,
+                            3
+                        ],
                         "requiredAction": 1
                     }
                 },
@@ -158,14 +178,18 @@
                     "name": "OnValue",
                     "width": "100px",
                     "add": "true",
-                    "edit": { "type": "ValidationTextBox" }
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    }
                 },
                 {
                     "caption": "Off value",
                     "name": "OffValue",
                     "width": "100px",
                     "add": "false",
-                    "edit": { "type": "ValidationTextBox" }
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    }
                 }
             ]
         },
@@ -183,7 +207,9 @@
                     "name": "Profile",
                     "width": "120px",
                     "add": "Day",
-                    "edit": { "type": "ValidationTextBox" }
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    }
                 },
                 {
                     "caption": "Condition variable",
@@ -192,7 +218,12 @@
                     "add": 0,
                     "edit": {
                         "type": "SelectVariable",
-                        "validVariableTypes": [0, 1, 2, 3]
+                        "validVariableTypes": [
+                            0,
+                            1,
+                            2,
+                            3
+                        ]
                     }
                 },
                 {
@@ -203,10 +234,22 @@
                     "edit": {
                         "type": "Select",
                         "options": [
-                            { "caption": "Equals value", "value": "equals" },
-                            { "caption": "Does not equal", "value": "not_equals" },
-                            { "caption": "Is active", "value": "active" },
-                            { "caption": "Is inactive", "value": "inactive" }
+                            {
+                                "caption": "Equals value",
+                                "value": "equals"
+                            },
+                            {
+                                "caption": "Does not equal",
+                                "value": "not_equals"
+                            },
+                            {
+                                "caption": "Is active",
+                                "value": "active"
+                            },
+                            {
+                                "caption": "Is inactive",
+                                "value": "inactive"
+                            }
                         ]
                     }
                 },
@@ -215,7 +258,9 @@
                     "name": "ExpectedValue",
                     "width": "100px",
                     "add": "true",
-                    "edit": { "type": "ValidationTextBox" }
+                    "edit": {
+                        "type": "ValidationTextBox"
+                    }
                 }
             ]
         },
@@ -227,7 +272,12 @@
             "type": "SelectVariable",
             "name": "TargetVariableID",
             "caption": "Optional output action variable",
-            "validVariableTypes": [0, 1, 2, 3],
+            "validVariableTypes": [
+                0,
+                1,
+                2,
+                3
+            ],
             "requiredAction": 1
         },
         {

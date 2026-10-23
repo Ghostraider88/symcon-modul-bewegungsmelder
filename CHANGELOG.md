@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1 — Build 4 — 2026-10-23
+
+- Format the configuration JSON according to the repository's style check.
+
 ## 0.1 — Build 3 — 2026-10-23
 
 - Fix PHP formatting and PHPUnit test loading.
