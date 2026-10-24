@@ -17,6 +17,21 @@ final class MotionSensorTest extends TestCaseSymconValidation
         $this->validateModule(__DIR__ . '/../MotionSensor');
     }
 
+    public function testMigrateAddsResumeOnUnblockDefault(): void
+    {
+        $instanceID = $this->createInstance();
+        $module = IPS\InstanceManager::getInstanceInterface($instanceID);
+        $configuration = json_encode([
+            'attributes'     => [],
+            'configuration'  => ['BlockVariableID' => 123],
+        ], JSON_THROW_ON_ERROR);
+
+        $migrated = json_decode($module->Migrate($configuration), true, 512, JSON_THROW_ON_ERROR);
+
+        $this->assertFalse($migrated['configuration']['ResumeOnUnblock']);
+        $this->assertSame('', $module->Migrate(json_encode($migrated, JSON_THROW_ON_ERROR)));
+    }
+
     public function testPresenceInputDrivesTypedOutputAndOffDelay(): void
     {
         $motionVariableID = $this->createVariable(VARIABLETYPE_BOOLEAN, false);

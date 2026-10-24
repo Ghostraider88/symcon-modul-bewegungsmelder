@@ -47,6 +47,25 @@ class MotionSensor extends IPSModuleStrict
         $this->RegisterMessage(0, IPS_KERNELSTARTED);
     }
 
+    public function Migrate(string $jsonData): string
+    {
+        if (method_exists(IPSModuleStrict::class, 'Migrate')) {
+            parent::Migrate($jsonData);
+        }
+
+        $data = json_decode($jsonData, true, 512, JSON_THROW_ON_ERROR);
+        if (!is_array($data) || !isset($data['configuration']) || !is_array($data['configuration'])) {
+            return '';
+        }
+
+        if (array_key_exists('ResumeOnUnblock', $data['configuration'])) {
+            return '';
+        }
+
+        $data['configuration']['ResumeOnUnblock'] = false;
+        return json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    }
+
     public function ApplyChanges(): void
     {
         parent::ApplyChanges();

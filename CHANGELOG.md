@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1 — Build 6 — 2026-10-24
+
+- Migrate existing instance configurations with the new resume-on-unblock property disabled by default.
+
 ## 0.1 — Build 5 — 2026-10-24
 
 - Add optional automatic resume when an external block becomes inactive, including a forced resend of the current output state.
