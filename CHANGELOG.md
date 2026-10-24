@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1 — Build 5 — 2026-10-24
+
+- Add optional automatic resume when an external block becomes inactive, including a forced resend of the current output state.
+
 ## 0.1 — Build 4 — 2026-10-23
 
 - Format the configuration JSON according to the repository's style check.

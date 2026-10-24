@@ -23,6 +23,7 @@ class MotionSensor extends IPSModuleStrict
         $this->RegisterPropertyInteger('OffDelay', 120);
         $this->RegisterPropertyInteger('BlockVariableID', 0);
         $this->RegisterPropertyBoolean('BlockWhenActive', true);
+        $this->RegisterPropertyBoolean('ResumeOnUnblock', false);
         $this->RegisterPropertyInteger('BrightnessVariableID', 0);
         $this->RegisterPropertyFloat('BrightnessThreshold', 800.0);
         $this->RegisterPropertyString('BrightnessCondition', 'below');
@@ -38,6 +39,7 @@ class MotionSensor extends IPSModuleStrict
         $this->RegisterAttributeString('LastCommandSignature', '');
         $this->RegisterAttributeString('LastOutputProfile', '');
         $this->RegisterAttributeBoolean('ManualOverrideActive', false);
+        $this->RegisterAttributeBoolean('ResumeOutputPending', false);
         $this->RegisterAttributeBoolean('LastOutputState', false);
         $this->RegisterAttributeBoolean('HasLastOutputState', false);
 
@@ -730,11 +732,25 @@ class MotionSensor extends IPSModuleStrict
         $this->SetValue('AutomaticBlocked', $blocked);
         $this->SetValue('TurnOnConditionMet', $brightnessConditionMet);
 
-        if (!$dispatch || $blocked || ($occupied && !$brightnessConditionMet)) {
+        $resumingOnUnblock = $this->ReadPropertyBoolean('ResumeOnUnblock')
+            && $this->ReadPropertyInteger('BlockVariableID') > 0
+            && !$blocked
+            && $this->ReadAttributeBoolean('ManualOverrideActive');
+        if ($resumingOnUnblock) {
+            $this->WriteAttributeBoolean('ManualOverrideActive', false);
+            $this->SetValue('ManualOverride', false);
+            $this->WriteAttributeBoolean('ResumeOutputPending', true);
+        }
+
+        if ((!$dispatch && !$resumingOnUnblock) || $blocked || ($occupied && !$brightnessConditionMet)) {
             return;
         }
 
-        $this->SetOutputState($occupied);
+        $forceOutput = $resumingOnUnblock || $this->ReadAttributeBoolean('ResumeOutputPending');
+        $this->SetOutputState($occupied, $forceOutput);
+        if ($forceOutput) {
+            $this->WriteAttributeBoolean('ResumeOutputPending', false);
+        }
     }
 
     private function IsExternalBlockActive(): bool

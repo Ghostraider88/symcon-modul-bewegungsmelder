@@ -108,6 +108,11 @@
             "caption": "Block when the selected variable is active"
         },
         {
+            "type": "CheckBox",
+            "name": "ResumeOnUnblock",
+            "caption": "Resume automation when the block is inactive"
+        },
+        {
             "type": "SelectVariable",
             "name": "BrightnessVariableID",
             "caption": "Optional brightness variable",

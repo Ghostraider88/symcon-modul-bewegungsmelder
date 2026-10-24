@@ -15,6 +15,7 @@
             "Off delay (seconds)": "Nachlauf (Sekunden)",
             "Optional automation block variable": "Optionale Automatik-Sperrvariable",
             "Block when the selected variable is active": "Sperren, wenn die ausgewählte Variable aktiv ist",
+            "Resume automation when the block is inactive": "Automatik fortsetzen, wenn die Sperre aufgehoben ist",
             "Optional brightness variable": "Optionale Helligkeitsvariable",
             "Brightness threshold (lx)": "Helligkeitsschwelle (lx)",
             "Allow automatic turn-on when brightness is": "Automatisches Einschalten zulassen bei Helligkeit",

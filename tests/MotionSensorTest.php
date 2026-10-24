@@ -325,6 +325,44 @@ final class MotionSensorTest extends TestCaseSymconValidation
         $this->assertFalse(GetValueBoolean(IPS_GetObjectIDByIdent('ManualOverride', $instanceID)));
     }
 
+    public function testResumeOnUnblockClearsManualOverrideAndResendsCurrentOutput(): void
+    {
+        $motionVariableID = $this->createVariable(VARIABLETYPE_BOOLEAN, false);
+        $blockVariableID = $this->createVariable(VARIABLETYPE_BOOLEAN, false);
+        $targetVariableID = $this->createActionableVariable(VARIABLETYPE_BOOLEAN, false);
+        $instanceID = $this->createInstance();
+        $this->configure($instanceID, [
+            'MotionVariableID' => $motionVariableID,
+            'BlockVariableID'  => $blockVariableID,
+            'ResumeOnUnblock'  => true,
+            'TargetVariableID' => $targetVariableID,
+            'OffDelay'         => 0,
+        ]);
+
+        $module = IPS\InstanceManager::getInstanceInterface($instanceID);
+        $refresh = $this->getModuleConfiguration()['prefix'] . '_Refresh';
+        $manualOverrideID = IPS_GetObjectIDByIdent('ManualOverride', $instanceID);
+        $outputStateID = IPS_GetObjectIDByIdent('OutputState', $instanceID);
+        $blockedID = IPS_GetObjectIDByIdent('AutomaticBlocked', $instanceID);
+
+        SetValue($motionVariableID, true);
+        $refresh($instanceID);
+        $this->assertTrue(GetValueBoolean($targetVariableID));
+
+        SetValue($blockVariableID, true);
+        $refresh($instanceID);
+        $module->RequestAction('ManualOverride', true);
+        SetValue($targetVariableID, false);
+
+        SetValue($blockVariableID, false);
+        $refresh($instanceID);
+
+        $this->assertFalse(GetValueBoolean($manualOverrideID));
+        $this->assertFalse(GetValueBoolean($blockedID));
+        $this->assertTrue(GetValueBoolean($outputStateID));
+        $this->assertTrue(GetValueBoolean($targetVariableID));
+    }
+
     public function testRequestActionRejectsWrongValueType(): void
     {
         $instanceID = $this->createInstance();
